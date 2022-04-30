@@ -1,0 +1,105 @@
+WHITESPACE = _{ " " | "\f" | "\n" | "\r" | "\n" | "\v"}
+
+Numeral = @{
+    "-"?
+    ~ ("0" | ASCII_NONZERO_DIGIT ~ ASCII_DIGIT*)
+    ~ ("." ~ ASCII_DIGIT*)?
+    ~ (^"e" ~ ("+" | "-")? ~ ASCII_DIGIT+)?
+}
+
+Name = {
+    !("and" | "break" | "do" | "else" | "elseif" | "end" |
+    "false" | "for" | "function" | "goto" | "if" | "in" |
+    "local" | "nil" | "not" | "or" | "repeat" | "return" |
+    "then" | "true" | "until" | "while") | ASCII_ALPHA+ 
+}
+
+LiteralString = { singleQuote | doubleQuote }
+inner = @{ char* }
+doubleQuote = ${ "\"" ~ inner ~ "\"" }
+singleQuote = ${ "'" ~ inner ~ "'" }
+char = {
+    !("\"" | "\\") ~ ANY
+    | "\\" ~ ("\"" | "\\" | "/" | "b" | "f" | "n" | "r" | "t")
+    | "\\" ~ ("u" ~ ASCII_HEX_DIGIT{4})
+}
+
+chunk = { block }
+
+block = { {stat} [retstat] }
+
+stat = { ';' | 
+          varlist '=' explist | 
+          functioncall | 
+          label | 
+          "break" | 
+          "goto" Name | 
+          "do" block "end" | 
+          "while" exp "do" block "end" | 
+          "repeat" block "until" exp | 
+          "if" exp "then" block {"elseif" exp "then" block} [else block] "end" | 
+          "for" Name '=' exp ',' exp [',' exp] "do" block "end" | 
+          "for" namelist "in" explist "do" block "end" | 
+          "function" funcname funcbody | 
+          "local function" Name funcbody | 
+          "local" attnamelist ['=' explist] }
+
+attnamelist =  Name attrib {',' Name attrib}
+
+attrib = ['<' Name '>']
+
+retstat = return [explist] [';']
+
+label = '::' Name '::'
+
+funcname = Name {'.' Name} [':' Name]
+
+varlist = var {',' var}
+
+var =  Name | prefixexp '[' exp ']' | prefixexp '.' Name 
+
+namelist = Name {',' Name}
+
+explist = exp {',' exp}
+
+exp =  nil | false | true | Numeral | LiteralStr"in"g | '...' | functiondef | 
+          prefixexp | tableconstructor | exp b"in"op exp | unop exp 
+
+prefixexp = var | functioncall | '(' exp ')'
+
+functioncall =  prefixexp args | prefixexp ':' Name args 
+
+args =  '(' [explist] ')' | tableconstructor | LiteralStr"in"g 
+
+functiondef = function funcbody
+
+funcbody = '(' [parlist] ')' block "end"
+
+parlist = namelist [',' '...'] | '...'
+
+tableconstructor = '{' [fieldlist] '}'
+
+fieldlist = field {fieldsep field} [fieldsep]
+
+field = '[' exp ']' '=' exp | Name '=' exp | exp
+
+fieldsep = ',' | ';'
+
+b"in"op =  '+' | '-' | '*' | '/' | '//' | '^' | '%' | 
+          '
+        &' | '
+        ~' | '
+        |' | '
+        >>' | '
+        <<' | '
+        ..' | 
+          '
+        <' | '
+        <=' | '
+        >' | '
+        >=' | '
+        ==' | '
+        ~=' | 
+          and | or
+
+unop = '-' | 'not' | '#' | '~'
