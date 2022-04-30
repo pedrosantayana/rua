@@ -1,5 +1,20 @@
+// Ok
 WHITESPACE = _{ " " | "\f" | "\n" | "\r" | "\n" | "\v"}
 
+// ok
+digit = { ANY_DIGIT+ }
+
+// todo
+hex = { 
+    ^"0x" ~ ^()+
+}
+
+// todo
+integer = { 
+
+}
+
+// todo
 Numeral = @{
     "-"?
     ~ ("0" | ASCII_NONZERO_DIGIT ~ ASCII_DIGIT*)
