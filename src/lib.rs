@@ -2,19 +2,12 @@ mod parser;
 
 #[cfg(test)]
 mod tests {
-    use crate::parser::Parser;
-
+    pub use crate::parser::AST;
+    
     #[test]
-    fn it_works() {
-        let a = Parser::new();
-        
-        match a {
-            Ok(a) => {
-                assert!(true);
-            },
-            Err(e) => {
-                println!("{:?}", e);
-            },
-        }
+    fn test_var() {
+        let ast = AST::from_string("local varName1 = 100");
     }
+
+
 }
