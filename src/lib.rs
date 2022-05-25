@@ -1,20 +1,11 @@
-mod parser;
+pub mod parser;
 
 #[cfg(test)]
 mod tests {
-    use crate::parser::Parser;
+  use super::*;
 
-    #[test]
-    fn it_works() {
-        let a = Parser::new();
-        
-        match a {
-            Ok(a) => {
-                assert!(true);
-            },
-            Err(e) => {
-                println!("{:?}", e);
-            },
-        }
-    }
+  #[test]
+  fn it_works() {
+    assert_eq!(2 + 2, 4);
+  }
 }
