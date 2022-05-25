@@ -1,8 +1,4 @@
-use nom::{
-    alt,
-    tag,
-    oneof
-}
+use nom::{IResult, bytes::complete::tag, character::complete::one_of, branch::alt, combinator::map, sequence::tuple};
 
 pub struct AST {
     chunk: Chunk
@@ -14,7 +10,7 @@ impl AST {
     }
 }
 
-
+struct Chunk;
 
 
 
@@ -37,12 +33,15 @@ enum Unop {
 
 impl Unop {
     pub fn new(input: &str) -> IResult<&str, Unop> {
-        let (input, res) = alt(tag("not"), oneof("-#~"));
+        //let (input, res) = tag("-")(input)?;
+
+        let (input, res) = alt((tag("not"), one_of("-#~")))(input).unwrap();
         match res {
-            "-" => Ok((input, Unop::Minus)),
+            '-' => Ok((input, Unop::Minus)),
             "not" => Ok((input, Unop::Not)),
-            "#" => Ok((input, Unop::Sharp)),
-            "~" => Ok((input, Unop::Til))
+            '#' => Ok((input, Unop::Sharp)),
+            '~' => Ok((input, Unop::Til)),
+            _ => Err()
         }
     }
 }
