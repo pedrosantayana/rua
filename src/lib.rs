@@ -1,4 +1,4 @@
-mod old_parser;
+mod parser;
 
 
 #[cfg(test)]
