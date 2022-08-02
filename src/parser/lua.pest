@@ -1,17 +1,33 @@
-WHITESPACE = _{ " " }
+// Whitespace - Status: Done
+WHITESPACE = _{ " " | "\\f" | "\\n" | "\\r" | "\\t" | "\\v" }
 
 // Numeric constant DONE
 integer = @{ ^"0x" ~ ASCII_HEX_DIGIT+ | ASCII_DIGIT+ }
-hex_float = @{ ^"0x" ~ ASCII_HEX_DIGIT+ ~ ("." ~ ASCII_HEX_DIGIT+)? ~ (^"p"~("+"|"-")?~ASCII_HEX_DIGIT+)? }
+hex_float = @{ ^"0x" ~ ASCII_HEX_DIGIT+ ~ ("." ~ ASCII_HEX_DIGIT+)? ~
+               (^"p"~("+"|"-")?~ASCII_HEX_DIGIT+)? }
 dec_float = @{ ASCII_DIGIT+ ~ ("." ~ ASCII_DIGIT+)? ~ (^"e"~("+"|"-")?~ASCII_DIGIT+)? }
 float = @{ hex_float | dec_float }
+number = { float | integer }
 
-// Literal String DONE
+// Literal String fixme
 inner = _{ ASCII_ALPHANUMERIC | " " | "\\a" | "\\b" |
            "\\f" | "\\n" | "\\r" | "\\t" | "\\v" | "\\" }
 double_quotes = @{ "\"" ~ (inner|"\'")* ~ "\"" }
 single_quotes = @{ "\'" ~ (inner|"\"")* ~ "\'" }
 string = { double_quotes | single_quotes }
+
+// Names
+invalids = _{ "and" | "break" | "do" | "else" | "elseif" | "end" |
+              "false" | "for" | "function" | "goto" | "if" | "in" |
+              "local" | "nil" | "not" | "or" | "repeat" | "return" |
+              "then" | "true" | "until" | "while" }
+name = @{ !ASCII_DIGIT ~ !invalids }
+
+
+
+
+
+
 // basic
 alpha = _{ 'a'..'z' | 'A'..'Z' }
 digit = _{ '0'..'9' }
