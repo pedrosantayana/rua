@@ -17,13 +17,12 @@ single_quotes = @{ "\'" ~ (inner|"\"")* ~ "\'" }
 string = { double_quotes | single_quotes }
 
 // Names
-invalids = _{ "and" | "break" | "do" | "else" | "elseif" | "end" |
+keywords = _{ ("and" | "break" | "do" | "else" | "elseif" | "end" |
               "false" | "for" | "function" | "goto" | "if" | "in" |
               "local" | "nil" | "not" | "or" | "repeat" | "return" |
-              "then" | "true" | "until" | "while" }
-name = @{ !ASCII_DIGIT ~ !invalids }
+              "then" | "true" | "until" | "while") ~ !("_" | ASCII_ALPHANUMERIC) }
 
-
+name = @{ !ASCII_DIGIT ~ !keywords ~ ("_" | ASCII_ALPHANUMERIC)+ }
 
 
 
