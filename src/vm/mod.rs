@@ -13,6 +13,6 @@ mod test {
     
 
 
-    vm.run_bytecode_file("/home/p314/src/langs/rua/luac.out");
+    // vm.run_bytecode_file("/home/p314/src/langs/rua/luac.out");
   }
 }
