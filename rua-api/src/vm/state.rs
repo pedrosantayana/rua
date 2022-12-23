@@ -1,40 +1,35 @@
-trait TValue {
-    
-}
+trait TValue {}
 
+#[derive(Default, Clone)]
 struct Stack {
-  vec: Vec<Box<dyn TValue>>,
-
+    stack: Vec<Box<dyn TValue>>,
 }
 
 impl Stack {
     pub fn new() -> Stack {
-        Stack {
-            vec: Vec::new()
-        }
+        Stack { stack: Vec::new() }
     }
 }
 
-struct Callinfo;
 
-impl Callinfo {
-    fn new() -> Callinfo {
-        unimplemented!()
-    }
+struct CallInfo{
+    top: Box<dyn TValue>,
+    base: Box<dyn TValue>,
+    func: Box<dyn TValue>,
+    prev: Box<CallInfo>
 }
 
+#[derive(Default, Clone)]
 pub struct State {
-  stack: Stack,
-  ci: Callinfo
+    stack: Stack,
+    ci: Vec<Box<CallInfo>>,
 }
 
 impl State {
-  pub fn new() -> State {
-    State {
-      stack: Stack::new(),
-        ci: Callinfo::new()
+    pub fn new() -> State {
+        State {
+            stack: Stack::new(),
+            ci: Vec::new(),
+        }
     }
-  }
-
-
 }

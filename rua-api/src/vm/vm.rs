@@ -1,28 +1,30 @@
+use std::fs::File;
 
-
-use super::{state::State, instructions::Chunk};
+use super::state::State;
 
 pub struct RuaVM {
-  state: State,
-
+    state: State,
 }
 
 impl RuaVM {
-  pub fn new() -> RuaVM {
-    RuaVM {
-      state: State::new()
+    pub fn new() -> Self {
+        Self {
+            state: State::new(),
+        }
     }
-  }
 
-  // pub fn run_bytecode_file(&mut self, path: &str) -> &mut RuaVM {
-  //   let mut file = File::open(path).unwrap();
-  //   let a = file.bytes();
-  //   let chunk = Chunk::
-  //   self
-  // }
+    pub fn load_bytecode_file(&mut self, path: &str) -> &mut RuaVM {
+        match File::open(path) {
+            Ok(file) => {
+                
+            }
+            Err(e) => println!("{?}", e),
+        }
 
-  // fn decode_bytecode() -> {
-  //   unimplemented!()
-  // }
+        self
+    }
 
+    fn load_bytecode(&mut self, bytecode: &[u8]) -> &mut Self {
+        unimplemented!()
+    }
 }
