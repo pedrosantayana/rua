@@ -5,3 +5,12 @@ edition = "2021"
 
 [dependencies]
 derive_builder = "0.12.0"
+rua-api = { path = "rua-api" }
+
+[workspace]
+
+members = [
+    "rua-parser",
+    "rua-api",
+    "ruac"
+]
