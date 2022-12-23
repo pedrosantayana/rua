@@ -1,28 +1,23 @@
-use std::{fs::File, io::{Read, Error}};
-
-use nom::Slice;
+use super::header::Header;
 
 pub enum Instruction {
-    MOVE(Register, Register),
-    LOADK(Register, )
+    MOVE(, dyn Register),
+    LOADK(dyn Register),
 }
 
 impl Instruction {
     pub fn new(bytecode: u32) -> Option<Instruction> {
-        let op = bytecode & 0x6;
-        let mut regA = Register(bytecode);
-        match op {
-            0 => Some(Instruction::MOVE()),
+        let operation_code = bytecode & 0x6;
+        let register_A = URegister((bytecode << 0x6) & 0xFF);
+        let register_B = IRegister((bytecode << 23) & );
 
+        let register_Ax = 
+
+        match operation_code {
+            0 => Some(Instruction::MOVE(register_A, register_B)),
         }
     }
-
-    pub fn decode(bytecode: Vec<u8>, header: ChunkHeader) -> Vec<Instruction> {
-
-    }
 }
-
-struct Register(u8);
 
 #[repr(u8)]
 pub enum OpCode {
@@ -74,11 +69,6 @@ pub enum OpCode {
     VARARG = 45,
 }
 
-pub struct Chunk {
-    header: ChunkHeader,
-
-}
-
 impl Chunk {
     pub fn new(bytecode: Vec<u8>) -> Result<Chunk, Error> {
         let header = ChunkHeader {
@@ -92,9 +82,7 @@ impl Chunk {
             number: bytecode.get(10).unwrap().to_owned(),
         };
 
-        Ok(Chunk {
-            header: header
-        })
+        Ok(Chunk { header: header })
     }
 
     // pub fn from_bytecode_file(path: &str) -> Self {
@@ -113,65 +101,45 @@ impl Chunk {
     // }
 }
 
+pub struct URegister(u8);
 
-pub struct ChunkHeader {
-    signature: u32,
-    version: u8,
-    format: u8,
-    endianness: u8,
-    int: u8,
-    size_t: u8,
-    instruction: u8,
-    number: u8
+
+pub struct IRegister(i16);
+
+#[repr(type)]
+pub enum RegisterType {
+    A = u8,
+    B = i16,
+    C = i16,
+    Bx = i32,
+    SBx = i32,
+    Ax = i32
 }
 
-impl ChunkHeader {
-    // pub fn from_bytes(b: Vec<u8>) -> Self {
-    //     ChunkHeader {
-    //         signature: b[0] << 24 || b[1] << 16 || b[2] << 8 || b[3],
-    //         version: b[4],
-    //         format: b[5],
-    //         endianness: b[6],
-    //         int: b[7],
-    //         size_t: b[8],
-    //         instruction: b[9],
-    //         number: b[10]
-
-    //     }
-    // }
-}
-
-struct Function {
-    line_start: u32,
-    line_end: u32,
-    params: u8,
-    vararg_flag: u8,
-    registers: Vec<Register>,
-    instructions: Vec<Instruction>,
-    constants: Vec<Constant>,
-    function_prototypes: Vec<FnPrototype>,
-    upvalues: Vec<dyn Value>
-}
-
-trait Value {
+pub struct Register {
+    r_type: RegisterType,
     
 }
 
-struct Upvalue {
 
+pub struct Function {
+  line_start: u32,
+  line_end: u32,
+  params: u8,
+  vararg_flag: u8,
+  registers: Vec<dyn Register>,
+  instructions: Vec<Instruction>,
+  constants: Vec<Constant>,
+  function_prototypes: Vec<FnPrototype>,
+  upvalues: Vec<dyn Value>,
 }
 
-struct FnPrototype {
+trait Register {}
 
-}
+trait Value {}
 
-struct Constant {
+struct Upvalue {}
 
-}
+struct FnPrototype {}
 
-#[test]
-fn test_create_chunk_from_file() {
-    let bytecode = include_bytes!("luac.out");
-
-    let chunk = Chunk::new(bytecode);
-}
+struct Constant {}
