@@ -1,14 +1,14 @@
-pub fn add(left: usize, right: usize) -> usize {
-    left + right
-}
+mod api;
+mod vm;
 
 #[cfg(test)]
 mod tests {
+    use crate::api::Rua;
+
     use super::*;
 
     #[test]
-    fn it_works() {
-        let result = add(2, 2);
-        assert_eq!(result, 4);
+    fn api_test() {
+        let mut rua = Rua
     }
 }
