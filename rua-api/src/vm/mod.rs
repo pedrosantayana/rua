@@ -1,4 +1,5 @@
-pub mod state;
+mod state;
+mod gc;
 mod vm;
 mod decoder;
 

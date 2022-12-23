@@ -34,7 +34,7 @@ pub enum InstructionSize {
     _4byte = 4
 }
 
-#[derive(Default, Builder)]
+// #[derive(Default, Builder)]
 pub struct Header {
     signature: Signature,
     version: LuaVersion,
@@ -44,17 +44,4 @@ pub struct Header {
     instruction_size: u8,
     size_t: u8,
     number_size: NumberSize
-}
-
-#[test]
-fn build_header() {
-    let mut builder = HeaderBuilder::default();
-    builder.signature(Signature::Lua);
-    builder.endianess(Endianess::BigEndianess);
-    builder.compatibility(1);
-    builder.integer_size(1);
-    builder.instruction_size(3);
-    builder.size_t(3);
-
-    let header = builder.build();
 }

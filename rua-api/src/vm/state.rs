@@ -1,3 +1,7 @@
+use super::gc::GCObject;
+
+
+
 trait TValue {}
 
 #[derive(Default, Clone)]
@@ -19,10 +23,17 @@ struct CallInfo{
     prev: Box<CallInfo>
 }
 
-#[derive(Default, Clone)]
-pub struct State {
-    stack: Stack,
-    ci: Vec<Box<CallInfo>>,
+enum StateStatus {
+
+}
+
+pub struct RuaState {
+    header: Header,
+    status: unimplemented!("enum with different status"),
+    call_info_stack: Vec<CallInfo>,
+    register_stack: Vec<Register>,
+    gc_list: Vec<GCObject>,
+
 }
 
 impl State {

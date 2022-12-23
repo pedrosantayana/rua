@@ -1,15 +1,25 @@
 use super::header::Header;
 
+type A = u8;
+type B = i16;
+type C = i16;
+type Bx = i32;
+type SBx = i32;
+type Ax = i32;
+
 pub enum Instruction {
-    MOVE(, dyn Register),
-    LOADK(dyn Register),
+    MOVE(Register<A>, Register<B>),
+    LOADK(Register<A>, Register<Bx>),
+    LOADKX(A),
+    LOADBOOL(Register<A>, Register<B>, Register<C>)
 }
 
 impl Instruction {
     pub fn new(bytecode: u32) -> Option<Instruction> {
-        let operation_code = bytecode & 0x6;
-        let register_A = URegister((bytecode << 0x6) & 0xFF);
-        let register_B = IRegister((bytecode << 23) & );
+        let operation_code: u8 = bytecode & 0x6;
+        let register_A: A = (bytecode << 0x6) & 0xFF;
+        let register_B: B = (bytecode << 23) & ;
+        let register_C: C = 
 
         let register_Ax = 
 
@@ -108,7 +118,7 @@ pub struct IRegister(i16);
 
 #[repr(type)]
 pub enum RegisterType {
-    A = u8,
+    type A = u8,
     B = i16,
     C = i16,
     Bx = i32,
@@ -116,9 +126,18 @@ pub enum RegisterType {
     Ax = i32
 }
 
-pub struct Register {
-    r_type: RegisterType,
-    
+pub struct Register<T> {
+    value: Box<T>,
+    reg_type: RegisterType
+}
+
+impl Register<T> {
+    pub fn new(reg_type: RegisterType, value: T) -> Self {
+        Self {
+            value: Box<T>::new(value),
+            reg_type: reg_type
+        }
+    }
 }
 
 
@@ -127,7 +146,7 @@ pub struct Function {
   line_end: u32,
   params: u8,
   vararg_flag: u8,
-  registers: Vec<dyn Register>,
+  registers: Vec<Register>,
   instructions: Vec<Instruction>,
   constants: Vec<Constant>,
   function_prototypes: Vec<FnPrototype>,
