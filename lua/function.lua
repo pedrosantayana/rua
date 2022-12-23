@@ -1,3 +1,3 @@
-function loucura() 
-  print("pedro")
+function test() 
+  print("hello, lua!")
 end
