@@ -6,5 +6,5 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-rua-parser = { path = "rua-parser" }
+# rua-parser = { path = "rua-parser" }
 derive_builder = "0.12.0"
