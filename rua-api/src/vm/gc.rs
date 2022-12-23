@@ -1,4 +1,3 @@
-#[unimplemented]
-struct GabargeCollector;
+pub struct GabargeCollector;
 
-
+pub struct GCObject;
